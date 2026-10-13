@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Are You a Real Best Friend?</title>
+<style>
+:root{
+  --paper:#f1eee5; --sage:#73958c; --navy:#263a53; --gold:#f5c46d;
+  --blue:#9dbbd0; --lav:#b9a3d2; --green:#a3c49a; --pink:#c87987;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--navy);font-family:Arial,Helvetica,sans-serif;overflow-x:hidden;
+  background-image:radial-gradient(circle at 12% 15%,#ffffff8a 0 2px,transparent 3px),radial-gradient(circle at 88% 80%,#73958c20 0 3px,transparent 4px);background-size:28px 28px}
+.wrap{max-width:850px;margin:0 auto;padding:22px 16px 40px}
+.hero{background:var(--sage);border:3px solid var(--navy);border-radius:24px;padding:26px 20px;text-align:center;box-shadow:6px 6px 0 #263a5320}
+.hero .emoji{font-size:34px;display:inline-block;animation:emojiFloat 2.6s ease-in-out infinite;filter:drop-shadow(0 4px 0 #263a5318)}
+h1{font-size:clamp(28px,5vw,44px);margin:8px 0;color:#fff8e8;letter-spacing:1px;animation:titlePop .8s cubic-bezier(.2,.8,.2,1) both;text-shadow:0 3px 0 #263a5338}
+.hero p{margin:0;color:#fff8e8;font-size:16px;animation:fadeUp .9s .15s both}
+.progressrow{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:20px 2px 8px;font-weight:700}
+.track{height:10px;background:#d4d2ca;border-radius:99px;overflow:hidden;margin-bottom:18px}
+.fill{height:100%;width:0;background:var(--gold);transition:width .25s}
+.card{background:#fffdf7;border:2px solid var(--navy);border-radius:20px;padding:22px;margin:14px 0;box-shadow:4px 4px 0 #263a5312;animation:cardEnter .55s ease both}
+.qhead{display:flex;gap:12px;align-items:flex-start}
+.num{flex:0 0 42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--gold);font-weight:800;font-size:18px}
+h2{font-size:20px;margin:7px 0 16px}
+.options{display:grid;gap:9px}
+.option{display:flex;gap:10px;align-items:flex-start;padding:12px 13px;border:2px solid #d8d8d0;border-radius:13px;cursor:pointer;transition:.15s;background:white}
+.option:hover{border-color:var(--sage);transform:translateY(-1px)}
+.option:has(input:checked){background:#e6eee9;border-color:var(--sage);box-shadow:inset 0 0 0 1px var(--sage)}
+.option input{margin-top:4px;accent-color:var(--sage);transform:scale(1.15)}
+.option span{line-height:1.4}
+.controls{display:flex;justify-content:space-between;gap:12px;margin-top:20px}
+button{border:2px solid var(--navy);border-radius:14px;padding:13px 20px;font-size:16px;font-weight:800;cursor:pointer;transition:transform .18s,box-shadow .18s}
+.primary{background:var(--gold);color:var(--navy);box-shadow:3px 3px 0 var(--navy)}
+button:not(:disabled):hover{transform:translateY(-3px) rotate(-1deg);box-shadow:5px 6px 0 #263a5330}
+button:not(:disabled):active{transform:translateY(1px) scale(.98)}
+.secondary{background:transparent;color:var(--navy)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.error{color:#a53c4d;font-weight:700;min-height:22px;margin-top:10px}
+.result{display:none;text-align:center;background:#fffdf7;border:3px solid var(--navy);border-radius:24px;padding:28px 22px;margin-top:22px;box-shadow:6px 6px 0 #263a5320;animation:resultReveal .75s cubic-bezier(.2,.8,.2,1) both;position:relative;overflow:hidden}
+.result .big{font-size:54px;display:inline-block}
+.result h2{font-size:clamp(26px,5vw,36px);margin:10px 0}
+.result p{font-size:17px;line-height:1.6;max-width:620px;margin:10px auto}
+.pill{display:inline-block;background:var(--gold);border-radius:99px;padding:8px 14px;font-weight:800;margin:8px}
+footer{text-align:center;font-weight:700;margin-top:24px;color:#536b68}
+@keyframes titlePop{0%{opacity:0;transform:translateY(18px) scale(.88);letter-spacing:8px}65%{transform:translateY(-3px) scale(1.03)}100%{opacity:1;transform:translateY(0) scale(1);letter-spacing:1px}}
+@keyframes emojiFloat{0%,100%{transform:translateY(0) rotate(-7deg)}50%{transform:translateY(-8px) rotate(8deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes cardEnter{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes resultReveal{0%{opacity:0;transform:scale(.82) rotate(-1deg)}70%{transform:scale(1.025) rotate(.4deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes resultBounce{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-12px) rotate(-9deg)}60%{transform:translateY(-5px) rotate(7deg)}}
+.result .big{animation:resultBounce 1.2s ease-in-out infinite}
+.hero:after{content:"✦  ♥  ✨";display:block;color:var(--gold);font-size:19px;letter-spacing:12px;margin-top:12px;animation:fadeUp 1.1s .3s both}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media(max-width:560px){.wrap{padding:14px 10px 28px}.card{padding:16px}.controls button{padding:12px 14px}.hero{padding:22px 14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="emoji">🎮 💚 ⭐</div>
+    <h1>ARE YOU A REAL BEST FRIEND?</h1>
+    <p>Choose honestly. No cheating… your bestie might be watching! 👀</p>
+  </header>
+  <div id="quiz">
+    <div class="progressrow"><span id="progressText">Question 1 of 5</span><span id="answeredText">0 answered</span></div>
+    <div class="track"><div class="fill" id="progressFill"></div></div>
+    <section class="card" id="questionCard">
+      <div class="qhead"><div class="num" id="number">01</div><div><h2 id="question"></h2></div></div>
+      <div class="options" id="options"></div>
+      <div class="error" id="error" aria-live="polite"></div>
+      <div class="controls">
+        <button class="secondary" id="backBtn" type="button">← Back</button>
+        <button class="primary" id="nextBtn" type="button">Next question →</button>
+      </div>
+    </section>
+  </div>
+  <section class="result" id="result" aria-live="polite">
+    <div class="big" id="resultEmoji">💚</div>
+    <div class="pill" id="resultLabel">YOUR FRIENDSHIP TYPE</div>
+    <h2 id="resultTitle"></h2>
+    <p id="resultText"></p>
+    <p id="resultAdvice"></p>
+    <button class="primary" id="restartBtn" type="button">↻ Try again</button>
+  </section>
+  <footer>Best friends, worst ideas. Together is always better! 💛</footer>
+</div>
+<script>
+const questions = [
+ {q:"Your friend posts an embarrassing photo of you. You…", a:[
+  ["Plan your revenge.","chaos"],["Laugh and ask them to delete it.","care"],["Post an even worse photo of them.","chaos"]]},
+ {q:"Your friend says, “I have a crazy idea.” You…", a:[
+  ["Ask what could possibly go wrong.","care"],["Say yes before hearing the plan.","chaos"],["Pretend your phone is dead.","quiet"]]},
+ {q:"Your friend is upset after failing a test. You…", a:[
+  ["Remind them that one test does not define them.","care"],["Tell them you got a better mark.","quiet"],["Send them memes until they laugh.","chaos"]]},
+ {q:"Your friend tells you a secret. You…", a:[
+  ["Keep it to yourself.","care"],["Tell just one person.","chaos"],["Accidentally mention it in the group chat.","chaos"]]},
+ {q:"You and your friend are lost in a new city. You…", a:[
+  ["Blame each other.","chaos"],["Work together to find the way.","care"],["Buy snacks and call it an adventure.","quiet"]]}
+];
+const types = {
+ care:{emoji:"💚",title:"THE RIDE-OR-DIE FRIEND",text:"You listen, support your friends, and show up when it matters. People can trust you with the serious stuff and the silly stuff.",advice:"Your superpower: loyalty. Keep being kind, honest, and dependable!"},
+ chaos:{emoji:"😂",title:"THE CHAOTIC FUN FRIEND",text:"Life with you is never boring. You bring jokes, bold ideas, and unforgettable stories. Your friends probably have at least one legendary story about you.",advice:"Your superpower: laughter. Just remember that a joke should make your friend laugh too, not feel hurt."},
+ quiet:{emoji:"✨",title:"THE QUIETLY AWESOME FRIEND",text:"You may not always be the loudest person in the room, but you notice things and bring your own calm energy. You know how to make ordinary moments memorable.",advice:"Your superpower: thoughtful energy. Speak up when your friend needs support, and your friendship will shine."}
+};
+let current=0;
+const answers = Array(questions.length).fill(null);
+const qEl=document.getElementById("question"), optsEl=document.getElementById("options");
+function render(){
+ const item=questions[current];
+ document.getElementById("number").textContent=String(current+1).padStart(2,"0");
+ document.getElementById("progressText").textContent=`Question ${current+1} of ${questions.length}`;
+ document.getElementById("answeredText").textContent=`${answers.filter(x=>x!==null).length} answered`;
+ document.getElementById("progressFill").style.width=`${(current/questions.length)*100}%`;
+ qEl.textContent=item.q; optsEl.innerHTML=""; document.getElementById("error").textContent="";
+ item.a.forEach((a,i)=>{
+  const label=document.createElement("label"); label.className="option";
+  const input=document.createElement("input"); input.type="radio"; input.name="answer"; input.value=i;
+  input.checked=answers[current]===i;
+  input.addEventListener("change",()=>{answers[current]=i;document.getElementById("answeredText").textContent=`${answers.filter(x=>x!==null).length} answered`;});
+  const span=document.createElement("span"); span.textContent=String.fromCharCode(65+i)+") "+a[0];
+  label.append(input,span); optsEl.append(label);
+ });
+ document.getElementById("backBtn").disabled=current===0;
+ document.getElementById("nextBtn").textContent=current===questions.length-1?"Show my result ✨":"Next question →";
+}
+document.getElementById("backBtn").addEventListener("click",()=>{if(current>0){current--;render();}});
+document.getElementById("nextBtn").addEventListener("click",()=>{
+ if(answers[current]===null){document.getElementById("error").textContent="Choose an answer first! 👀";return;}
+ if(current<questions.length-1){current++;render();}else showResult();
+});
+function showResult(){
+ const score={care:0,chaos:0,quiet:0};
+ answers.forEach((choice,i)=>score[questions[i].a[choice][1]]++);
+ let winner=Object.keys(score).sort((a,b)=>score[b]-score[a])[0];
+ if(score.care===score.chaos && score.care===score.quiet) winner="care";
+ const t=types[winner];
+ document.getElementById("quiz").style.display="none";
+ document.getElementById("result").style.display="block";
+ document.getElementById("progressFill").style.width="100%";
+ document.getElementById("resultEmoji").textContent=t.emoji;
+ document.getElementById("resultTitle").textContent=t.title;
+ document.getElementById("resultText").textContent=t.text;
+ document.getElementById("resultAdvice").textContent=t.advice;
+ document.getElementById("resultLabel").textContent="YOUR FRIENDSHIP TYPE";
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+document.getElementById("restartBtn").addEventListener("click",()=>{
+ answers.fill(null);current=0;document.getElementById("result").style.display="none";document.getElementById("quiz").style.display="block";render();window.scrollTo({top:0,behavior:"smooth"});
+});
+render();
+</script>
+</body>
+</html>
